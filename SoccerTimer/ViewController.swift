@@ -15,6 +15,9 @@ class ViewController: UIViewController {
     
     let minutesInQuarter = "08:00"
     let timeFormat = "mm:ss"
+    
+    //see link below for sounds inventory -- bhd
+    //https://github.com/TUNER88/iOSSystemSoundsLibrary
     let buzzerSound : SystemSoundID = 1005
     
     var date = Date()
