@@ -7,18 +7,25 @@
 //
 
 import UIKit
+import AVFoundation
 
 class ViewController: UIViewController {
     
     @IBOutlet weak var timerDisplay: UILabel!
     
+    let minutesInQuarter = "08:00"
+    let timeFormat = "mm:ss"
+    let buzzerSound : SystemSoundID = 1005
+    
     var date = Date()
     var dateFormatter = DateFormatter()
+    var timer = Timer()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        dateFormatter.dateFormat = "mm:ss"
-        date = dateFormatter.date(from: "08:00")!
+        dateFormatter.dateFormat = timeFormat
+        date = dateFormatter.date(from: minutesInQuarter)!
     }
 
     override func didReceiveMemoryWarning() {
@@ -32,15 +39,26 @@ class ViewController: UIViewController {
     
     func runTimer()
     {
-        Timer.scheduledTimer(timeInterval: 1, target: self,
-                                     selector: (#selector(ViewController.updateTimerDisplay)), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self,
+            selector: (#selector(ViewController.updateTimerDisplay))
+                , userInfo: nil, repeats: true)
     }
     
     @objc func updateTimerDisplay()
     {
         date.addTimeInterval(-1)
         let updatedTime = dateFormatter.string(from: date)
+        if (updatedTime == "00:00")
+        {
+            playBuzzer()
+            timer.invalidate()
+        }
         timerDisplay.text = updatedTime
+    }
+    
+    func playBuzzer()
+    {
+        AudioServicesPlayAlertSound(buzzerSound)
     }
 }
 
